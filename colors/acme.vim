@@ -17,13 +17,13 @@ endif
 let g:colors_name = 'acme'
 set background=light
 
-" Palette :       [GUI,       256, 16]
+" Palette :       [GUI,       256, 8]
 let s:fg        = ['#000000', 0,   0]
 let s:bg        = ['#ffffea', 230, 7]
-let s:tag       = ['#eaffff', 195, 12]
-let s:handle    = ['#8888cc', 104, 12]
+let s:tag       = ['#eaffff', 195, 6]
+let s:handle    = ['#8888cc', 104, 4]
 let s:dirty     = ['#000099', 18,  4]
-let s:selected  = ['#eeee9e', 229, 11]
+let s:selected  = ['#eeee9e', 229, 3]
 let s:scroll    = ['#99994c', 101, 3]
 let s:red       = ['#aa0000', 1,   1]
 let s:green     = ['#006600', 2,   2]
