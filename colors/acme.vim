@@ -60,16 +60,16 @@ function! s:HL(group, fg, ...)
     let emstr = 'NONE,'
   endif
 
-  if !has('gui_running') && &t_Co != 256
+  if (!has('gui_running') || empty($DISPLAY) || &t_Co != 256)
       " set cterm element in color arrays
-      let s:concol = 2
+      let s:ccol = 2
   else
-      let s:concol = 1
+      let s:ccol = 1
   endif
 
   let histring = [ 'hi', a:group,
-      \ 'guifg=' . fg[0], 'ctermfg=' . fg[s:concol],
-      \ 'guibg=' . bg[0], 'ctermbg=' . fg[s:concol],
+      \ 'guifg=' . fg[0], 'ctermfg=' . fg[s:ccol],
+      \ 'guibg=' . bg[0], 'ctermbg=' . fg[s:ccol],
       \ 'gui=' . emstr[:-2], 'cterm=' . emstr[:-2]
       \ ]
 
