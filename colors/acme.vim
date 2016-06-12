@@ -2,6 +2,11 @@
 " based on Pike's acme editor
 " by Case Duckworth
 
+augroup Development
+    au!
+    au BufWritePost acme.vim colorscheme acme
+augroup END
+
 if version > 580
   hi clear
   if exists("syntax_on")
@@ -20,8 +25,8 @@ let s:handle   = ['#8888cc', 104, 12]
 let s:dirty    = ['#000099', 18,  4]
 let s:selected = ['#eeee9e', 229, 11]
 let s:scroll   = ['#99994c', 101, 3]
-let s:mouse2   = ['#aa0000', 1,   1]
-let s:mouse3   = ['#006600', 2,   2]
+let s:red   = ['#aa0000', 1,   1]
+let s:green   = ['#006600', 2,   2]
 
 let s:bold      = 'bold,'
 let s:italic    = 'italic,'
@@ -75,6 +80,13 @@ function! s:HL(group, fg, ...)
   execute join(histring, ' ')
 endfunction
 
+" To make things easier
+call s:HL('Bold',              s:none,   s:none, s:bold)
+call s:HL('Italic',            s:none,   s:none, s:italic)
+call s:HL('Underline',         s:none,   s:none, s:underline)
+call s:HL('BoldItalic',        s:none,   s:none, s:bold . s:italic)
+call s:HL('BoldUnderline',     s:none,   s:none, s:bold . s:underline)
+
 " Vim Highlight groups
 call s:HL('Normal',            s:fg,     s:bg)
 
@@ -88,40 +100,39 @@ call s:HL('CursorLineNr',      s:scroll, s:selected)
 call s:HL('LineNr',            s:bg,     s:selected)
 call s:HL('FoldColumn',        s:scroll, s:selected)
 call s:HL('SignColumn',        s:handle, s:selected)
-
 call s:HL('ColorColumn',       s:none,   s:selected)
 
-call s:HL('DiffAdd',           s:mouse3, s:none, s:inverse)
+call s:HL('DiffAdd',           s:green, s:none, s:inverse)
 call s:HL('DiffChange',        s:dirty,  s:none, s:inverse)
-call s:HL('DiffDelete',        s:mouse2, s:none, s:inverse)
+call s:HL('DiffDelete',        s:red, s:none, s:inverse)
 call s:HL('DiffText',          s:dirty)
 
-call s:HL('ErrorMsg',          s:mouse2, s:none, s:inverse)
-call s:HL('Question',          s:mouse3)
-call s:HL('WarningMsg',        s:mouse2)
+call s:HL('ErrorMsg',          s:red, s:none, s:inverse)
+call s:HL('Question',          s:green)
+call s:HL('WarningMsg',        s:red)
 call s:HL('ModeMsg',           s:dirty)
 call s:HL('WildMenu',          s:none,   s:tag,  s:inverse)
 call s:HL('Title',             'Comment')
 
 call s:HL('Cursor',            s:none,   s:none, s:inverse)
-call s:HL('Directory',         s:none,   s:none, s:bold)
+call s:HL('Directory',         'Bold')
 call s:HL('Folded',            s:handle, s:dirty)
 " call s:HL('Pmenu', 
 " call s:HL('PmenuSbar', 
 " call s:HL('PmenuSel', 
 
 call s:HL('MatchParen',        s:handle, s:none, s:bold)
-call s:HL('Visual',            s:handle, s:none, s:inverse)
+call s:HL('Visual',            s:none,   s:selected)
 
-call s:HL('NonText',           s:selected)
-call s:HL('SpecialKey',        s:selected)
+call s:HL('NonText',           s:scroll)
+call s:HL('SpecialKey',        s:scroll)
 
 call s:HL('VertSplit',         s:none,   s:tag)
-call s:HL('StatusLine',        s:none,   s:tag,  s:bold)
-call s:HL('StatusLineNC',      s:none,   s:tag)
+call s:HL('StatusLine',        s:none,   s:tag,  s:bold . s:underline)
+call s:HL('StatusLineNC',      s:none,   s:tag, s:underline)
 
-call s:HL('TabLine',           s:none,   s:tag)
-call s:HL('TabLineFill',       s:none,   s:tag)
+call s:HL('TabLine',           s:none,   s:tag, s:underline)
+call s:HL('TabLineFill',       s:none,   s:tag, s:underline)
 call s:HL('TabLineSel',        s:dirty,  s:tag,  s:inverse)
 
 call s:HL('SpellBad',          s:dirty,  s:bg,   s:underline)
@@ -139,9 +150,9 @@ call s:HL('Number',            s:none)
 call s:HL('Boolean',           s:none)
 call s:HL('Float',             s:none)
 
-call s:HL('Identifier',        s:none,   s:none, s:italic)
-call s:HL('Function',          s:none,   s:none, s:bold)
-call s:HL('VarId',             s:none,   s:none, s:italic)
+call s:HL('Identifier',        s:none)
+call s:HL('Function',          s:none)
+call s:HL('VarId',             s:none)
 
 call s:HL('Statement',         s:none)
 call s:HL('Conditional',       s:none)
@@ -157,9 +168,9 @@ call s:HL('Define',            s:none)
 call s:HL('Macro',             s:none)
 call s:HL('PreCondit',         s:none)
 
-call s:HL('Type',              s:none,   s:none, s:underline)
+call s:HL('Type',              s:none)
 call s:HL('StorageClass',      s:none)
-call s:HL('Structure',         s:none,   s:none, s:bold)
+call s:HL('Structure',         s:none)
 call s:HL('Typedef',           s:none)
 
 call s:HL('Special',           s:none)
@@ -169,14 +180,14 @@ call s:HL('Delimiter',         s:none)
 call s:HL('SpecialComment',    s:none)
 call s:HL('Debug',             s:none)
 
-call s:HL('Italic',            s:none,   s:none, s:italic)
-call s:HL('Underlined',        s:none,   s:none, s:underline)
-call s:HL('Error',             s:none)
-call s:HL('Todo',              s:none)
+call s:HL('Error',             s:red)
+call s:HL('Todo',              s:green, s:selected)
 
 " Filetype-specific
 " " Haskell
-call s:HL('haskellType',       'Type')
-call s:HL('haskellIdentifier', s:none,   s:none, s:italic)
+call s:HL('haskellType',       'Underline')
+call s:HL('haskellIdentifier', 'Italic')
 " " SH
 call s:HL('shHereDoc',         'Italic')
+" " Vim
+call s:HL('vimCommentTitle',    s:handle, s:none, s:italic . s:bold)
